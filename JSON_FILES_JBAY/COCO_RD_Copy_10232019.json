@@ -1,7 +1,7 @@
 [
 	{
 		"identifier":"RD_FTU_DashboardBeeps_CPY",
-		"english":"Turn your camera beeps on or off.",
+		"english":"english",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,
@@ -17,7 +17,7 @@
 
 	{
 		"identifier":"RD_FTU_DashboardBeeps_HDR",
-		"english":"BEEPS",
+		"english":"english",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,
@@ -33,7 +33,7 @@
 
 	{
 		"identifier":"RD_FTU_DashboardVoiceControl_CPY",
-		"english":"Control your GoPro using \nsimple voice commands.",
+		"english":"english",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,

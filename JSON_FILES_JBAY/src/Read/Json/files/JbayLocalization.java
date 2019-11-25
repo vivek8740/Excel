@@ -21,118 +21,185 @@ public class JbayLocalization {
 	public static String filePath = "D:/LAUNCH_StringFile_Latest_JBay_07.xls";
 	public static Object object;
 
-	public static int count = 0;
-	public static int languageCount = 0;
-	public static ArrayList<LanguagePojo> arrayList = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListEnglish = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListPTBR = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListCN = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListDE = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListES = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListFR = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListIT = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListJP = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListKR = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListRU = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListSE = new ArrayList<LanguagePojo>();
+	public static ArrayList<LanguagePojo> arrayListTW = new ArrayList<LanguagePojo>();
+	
+	public static int columnCount = 0;
+	public static int headerCount = 0;
 
+	public static HSSFWorkbook workbook;
+	public static HSSFSheet sheet;
+	public static FileOutputStream fileOut ;
+	public static JSONParser jsonParser;
+	
 	public static void main(String[] args) {
 
+		generateNullArray();
+		init();
+	}
+
+	private static void generateNullArray() {
+		arrayListEnglish.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListPTBR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListCN.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListDE.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListES.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListFR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListIT.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListJP.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListKR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListRU.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListSE.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+		arrayListTW.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+	}
+
+	private static void init() {
+
 		try {
-			HSSFWorkbook workbook = new HSSFWorkbook();
-			HSSFSheet sheet = workbook.createSheet("StringSheet");
-			JSONParser jsonParser = new JSONParser();
-			arrayList.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
+
+			workbook = new HSSFWorkbook();
+			sheet = workbook.createSheet("StringSheet");
+			jsonParser = new JSONParser();
 			
-			if (languageCount == 0) {
-				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_10232019.json");
-				create(filePath, workbook, sheet);
-				languageCount++;
-			}
-//			if (languageCount == 1) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_BR.json");
-//				create(filePath, workbook, sheet);
-//				languageCount++;
-//			}
-//			if (languageCount == 2) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_CN.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 3) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_DE.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 4) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_ES.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 5) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_FR.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 6) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_IT.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 7) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_JP.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 8) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_KR.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 9) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_RU.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 10) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_SE.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
-//			if (languageCount == 11) {
-//				arrayList = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_TW.json");
-//				create(filePath, workbook, sheet, arrayList);
-//				languageCount++;
-//			}
+			arrayListEnglish = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_10232019.json");
+			arrayListPTBR = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_BR.json");
+			arrayListCN = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_CN.json");
+			arrayListDE = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_DE.json");
+			arrayListES = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_ES.json");
+			arrayListFR = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_FR.json");
+			arrayListIT = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_IT.json");
+			arrayListJP = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_JP.json");
+			arrayListKR = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_KR.json");
+			arrayListRU = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_RU.json");
+			arrayListSE = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_SE.json");
+			arrayListTW = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_TW.json");
+
+			create(filePath, workbook, sheet);
+
+			fileOut = new FileOutputStream(filePath);
+			workbook.write(fileOut);
+			fileOut.close();
+			workbook.close();
 			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
+			
+			try {
+				fileOut = new FileOutputStream(filePath);
+				workbook.write(fileOut);
+				fileOut.close();
+				workbook.close();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
+
 	}
 
 	public static void create(String filename, HSSFWorkbook workbook, HSSFSheet sheet) {
 
 		try {
-			for (int i = 0; i < arrayList.size(); i++) {
+			for (int i = 0; i < arrayListEnglish.size(); i++) {
 				if (i == 0) {
 
 					HSSFRow rowhead = sheet.createRow((short) 0);
-					rowhead.createCell(count).setCellValue("Identifier");
-					count++;
-					rowhead.createCell(count).setCellValue("Default");
-					count++;
+					// English
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Default");
+					details(rowhead);
+
+					// Portuguese -> BR
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Portuguese");
+					details(rowhead);
+
+					// Simplified Chinese -> CN
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Chinese");
+					details(rowhead);
+
+					// German -> DE
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("German");
+					details(rowhead);
+
+					// Spanish -> ES
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Spanish");
+					details(rowhead);
+
+					// French -> FR
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("French");
+					details(rowhead);
+
+					// Italian -> IT
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Italian");
+					details(rowhead);
+
+					// Japanese -> JP
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Japanese");
+					details(rowhead);
+
+					// Korean -> KR
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Korean");
+					details(rowhead);
+
+					// Russian -> RU
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Russian");
+					details(rowhead);
+
+					// Swedish -> SE
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("Swedish");
+					details(rowhead);
+
+					// TChinese -> TW
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("TChinese");
+					details(rowhead);
+					
+					// TChinese -> TW
+					rowhead.createCell(headerCount).setCellValue("Identifier");
+					headerCount++;
+					rowhead.createCell(headerCount).setCellValue("TChinese");
 					details(rowhead);
 
 				} else {
-
+					
 					HSSFRow row = sheet.createRow((short) i);
-					row.createCell(0).setCellValue(arrayList.get(i).getIdentifier());
-					row.createCell(1).setCellValue(arrayList.get(i).getEnglish());
-					row.createCell(2).setCellValue(arrayList.get(i).getFontName());
-					row.createCell(3).setCellValue(arrayList.get(i).getFontSize());
-					row.createCell(4).setCellValue(arrayList.get(i).getTextAlignment());
-					row.createCell(5).setCellValue(arrayList.get(i).getMaxChar());
-					row.createCell(6).setCellValue(arrayList.get(i).getMaxLine());
-					row.createCell(7).setCellValue(
-							"W: " + arrayList.get(i).getWidth() + " " + "H: " + arrayList.get(i).getHeight());
-
-					System.out.println(row.getHeightInPoints() / 0.75);
+					setCellValues(row, i);
 				}
 			}
-			FileOutputStream fileOut = new FileOutputStream(filename);
-			workbook.write(fileOut);
-			fileOut.close();
-			workbook.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			e.getMessage();
@@ -142,20 +209,58 @@ public class JbayLocalization {
 	}
 
 	private static void details(HSSFRow rowhead) {
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("fontName");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("fontSize");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("textAlignment");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("maxChar");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("maxLine");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("size");
+		headerCount++;
+	}
 
-		rowhead.createCell(count).setCellValue("fontName");
-		count++;
-		rowhead.createCell(count).setCellValue("fontSize");
-		count++;
-		rowhead.createCell(count).setCellValue("textAlignment");
-		count++;
-		rowhead.createCell(count).setCellValue("maxChar");
-		count++;
-		rowhead.createCell(count).setCellValue("maxLine");
-		count++;
-		rowhead.createCell(count).setCellValue("size");
-		count++;
-		System.out.println(count);
+	private static void setCellValues(HSSFRow row, int i) {
+
+		valueRowByrow(row, i, arrayListEnglish);
+		valueRowByrow(row, i, arrayListPTBR);
+		valueRowByrow(row, i, arrayListCN);
+		valueRowByrow(row, i, arrayListDE);
+		valueRowByrow(row, i, arrayListES);
+		valueRowByrow(row, i, arrayListFR);
+		valueRowByrow(row, i, arrayListIT);
+		valueRowByrow(row, i, arrayListJP);
+		valueRowByrow(row, i, arrayListKR);
+		valueRowByrow(row, i, arrayListRU);
+		valueRowByrow(row, i, arrayListSE);
+		valueRowByrow(row, i, arrayListTW);
+		valueRowByrow(row, i, arrayListTW);
+
+		columnCount = 0;
+	}
+
+	private static void valueRowByrow(HSSFRow row, int i, ArrayList<LanguagePojo> arrayList) {
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getIdentifier());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getLanguage());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getFontName());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getFontSize());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getTextAlignment());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getMaxChar());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getMaxLine());
+		columnCount++;
+		row.createCell(columnCount)
+				.setCellValue("W: " + arrayList.get(i).getWidth() + " " + "H: " + arrayList.get(i).getHeight());
+		columnCount++;
 	}
 
 }

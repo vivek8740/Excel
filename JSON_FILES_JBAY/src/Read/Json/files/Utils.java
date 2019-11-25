@@ -13,16 +13,16 @@ import org.json.simple.parser.ParseException;
 public class Utils {
 
 	public static Object object;
-	public static ArrayList<LanguagePojo> arrayList = new ArrayList<>();
 	public static String filePath = "D:/Test_LAUNCH_StringFile_Latest_JBay_07.xls";
 
 	public static ArrayList<LanguagePojo> getlanguages(HSSFWorkbook workbook, HSSFSheet sheet, JSONParser jsonParser,
-			String JsonFile) {
+			String fileName) {
 
+		ArrayList<LanguagePojo> arrayList = new ArrayList<>();
 		try {
-			FileReader reader = new FileReader(JsonFile);
+			FileReader reader = new FileReader(fileName);
 			object = jsonParser.parse(reader);
-			
+
 			JSONArray jsonArray = (JSONArray) object;
 			String language = null;
 
@@ -75,7 +75,7 @@ public class Utils {
 				Long maxLine = (Long) jsonObjectNote.get("maxLine");
 
 				JSONObject jsonObjectSize = (JSONObject) jsonObjectNote.get("size");
-				Object width = (Object) jsonObjectSize.get("width");
+				Object width = jsonObjectSize.get("width");
 				Object height = (Object) jsonObjectSize.get("height");
 
 				arrayList.add(new LanguagePojo(identifier, language, fontSize, textAlignment, fontName, maxChar,

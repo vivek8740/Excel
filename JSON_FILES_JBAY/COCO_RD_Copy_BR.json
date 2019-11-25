@@ -1,7 +1,7 @@
 [
 	{
 		"identifier":"RD_FTU_DashboardBeeps_CPY",
-		"ptBR":"Ative ou desative os bipes da sua câmera.",
+		"ptBR":"Br",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,
@@ -17,7 +17,7 @@
 
 	{
 		"identifier":"RD_FTU_DashboardBeeps_HDR",
-		"ptBR":"BIPES",
+		"ptBR":"Br",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,
@@ -33,7 +33,7 @@
 
 	{
 		"identifier":"RD_FTU_DashboardVoiceControl_CPY",
-		"ptBR":"Controle sua GoPro usando comandos por voz simples.",
+		"ptBR":"Br",
 		"note":        {
             "fontSize": 20,
             "textAlignment": 2,

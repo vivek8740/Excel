@@ -3,7 +3,7 @@ package Read.Json.files;
 public class LanguagePojo {
 
 	public String identifier;
-	public String english;
+	public String language;
 	public Long fontSize;
 	public Long textAlignment;
 	public String fontName;
@@ -12,10 +12,10 @@ public class LanguagePojo {
 	public Object width;
 	public Object height;
 
-	public LanguagePojo(String identifier, String english, Long fontSize, Long textAlignment, String fontName,
+	public LanguagePojo(String identifier, String language, Long fontSize, Long textAlignment, String fontName,
 			Long maxChar, Long maxLine, Object width, Object height) {
 		this.identifier = identifier;
-		this.english = english;
+		this.language = language;
 		this.fontSize = fontSize;
 		this.textAlignment = textAlignment;
 		this.fontName = fontName;
@@ -33,12 +33,12 @@ public class LanguagePojo {
 		this.identifier = identifier;
 	}
 
-	public String getEnglish() {
-		return english;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setEnglish(String english) {
-		this.english = english;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public Long getFontSize() {
