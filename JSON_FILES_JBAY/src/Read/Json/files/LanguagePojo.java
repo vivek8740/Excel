@@ -9,11 +9,11 @@ public class LanguagePojo {
 	public String fontName;
 	public Long maxChar;
 	public Long maxLine;
-	public Object width;
-	public Object height;
+	public int width;
+	public int height;
 
 	public LanguagePojo(String identifier, String language, Long fontSize, Long textAlignment, String fontName,
-			Long maxChar, Long maxLine, Object width, Object height) {
+			Long maxChar, Long maxLine, int width, int height) {
 		this.identifier = identifier;
 		this.language = language;
 		this.fontSize = fontSize;
@@ -81,19 +81,19 @@ public class LanguagePojo {
 		this.maxLine = maxLine;
 	}
 
-	public Object getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
-	public void setWidth(Object width) {
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
-	public Object getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
-	public void setHeight(Object height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 }

@@ -19,6 +19,7 @@ public class Utils {
 			String fileName) {
 
 		ArrayList<LanguagePojo> arrayList = new ArrayList<>();
+		arrayList.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, 0, 0));
 		try {
 			FileReader reader = new FileReader(fileName);
 			object = jsonParser.parse(reader);
@@ -75,8 +76,13 @@ public class Utils {
 				Long maxLine = (Long) jsonObjectNote.get("maxLine");
 
 				JSONObject jsonObjectSize = (JSONObject) jsonObjectNote.get("size");
-				Object width = jsonObjectSize.get("width");
-				Object height = (Object) jsonObjectSize.get("height");
+				Object objectWidth = jsonObjectSize.get("width");
+				float floatWidth = Float.valueOf(String.valueOf(objectWidth));
+				int width = (int) floatWidth;
+				
+				Object objectHeight = (Object) jsonObjectSize.get("height");
+				float floatHeight = Float.valueOf(String.valueOf(objectHeight));
+				int height = (int) floatHeight;
 
 				arrayList.add(new LanguagePojo(identifier, language, fontSize, textAlignment, fontName, maxChar,
 						maxLine, width, height));

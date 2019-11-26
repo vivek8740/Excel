@@ -33,34 +33,18 @@ public class JbayLocalization {
 	public static ArrayList<LanguagePojo> arrayListRU = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListSE = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListTW = new ArrayList<LanguagePojo>();
-	
+
 	public static int columnCount = 0;
 	public static int headerCount = 0;
 
 	public static HSSFWorkbook workbook;
 	public static HSSFSheet sheet;
-	public static FileOutputStream fileOut ;
+	public static FileOutputStream fileOut;
 	public static JSONParser jsonParser;
-	
+
 	public static void main(String[] args) {
 
-		generateNullArray();
 		init();
-	}
-
-	private static void generateNullArray() {
-		arrayListEnglish.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListPTBR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListCN.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListDE.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListES.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListFR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListIT.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListJP.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListKR.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListRU.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListSE.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
-		arrayListTW.add(new LanguagePojo(null, null, (long) 0, (long) 0, null, (long) 0, (long) 0, null, null));
 	}
 
 	private static void init() {
@@ -70,7 +54,7 @@ public class JbayLocalization {
 			workbook = new HSSFWorkbook();
 			sheet = workbook.createSheet("StringSheet");
 			jsonParser = new JSONParser();
-			
+
 			arrayListEnglish = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_10232019.json");
 			arrayListPTBR = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_BR.json");
 			arrayListCN = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_CN.json");
@@ -90,17 +74,17 @@ public class JbayLocalization {
 			workbook.write(fileOut);
 			fileOut.close();
 			workbook.close();
-			
+
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
-			
+
 			try {
 				fileOut = new FileOutputStream(filePath);
 				workbook.write(fileOut);
 				fileOut.close();
 				workbook.close();
-				
+
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -187,7 +171,7 @@ public class JbayLocalization {
 					headerCount++;
 					rowhead.createCell(headerCount).setCellValue("TChinese");
 					details(rowhead);
-					
+
 					// TChinese -> TW
 					rowhead.createCell(headerCount).setCellValue("Identifier");
 					headerCount++;
@@ -195,7 +179,7 @@ public class JbayLocalization {
 					details(rowhead);
 
 				} else {
-					
+
 					HSSFRow row = sheet.createRow((short) i);
 					setCellValues(row, i);
 				}
@@ -220,7 +204,9 @@ public class JbayLocalization {
 		headerCount++;
 		rowhead.createCell(headerCount).setCellValue("maxLine");
 		headerCount++;
-		rowhead.createCell(headerCount).setCellValue("size");
+		rowhead.createCell(headerCount).setCellValue("Width");
+		headerCount++;
+		rowhead.createCell(headerCount).setCellValue("Height");
 		headerCount++;
 	}
 
@@ -258,8 +244,9 @@ public class JbayLocalization {
 		columnCount++;
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getMaxLine());
 		columnCount++;
-		row.createCell(columnCount)
-				.setCellValue("W: " + arrayList.get(i).getWidth() + " " + "H: " + arrayList.get(i).getHeight());
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getWidth());
+		columnCount++;
+		row.createCell(columnCount).setCellValue(arrayList.get(i).getHeight());
 		columnCount++;
 	}
 
