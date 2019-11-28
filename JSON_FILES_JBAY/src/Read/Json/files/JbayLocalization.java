@@ -45,6 +45,8 @@ public class JbayLocalization {
 	public static void main(String[] args) {
 
 		init();
+		Detect obj1 = new Detect();
+		obj1.findTruncation();
 	}
 
 	private static void init() {

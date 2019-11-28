@@ -6,21 +6,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/gson-1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/json-simple-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-4.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-examples-4.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-excelant-4.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-ooxml-4.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-ooxml-schemas-4.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/GUR50140/Desktop/eclipse-jee-oxygen-3-win32-x86_64/Lib/poi-scratchpad-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/gson-1.7.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-examples-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-excelant-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-ooxml-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-ooxml-schemas-4.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse/workspace/Lib/poi-scratchpad-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/gson-1.7.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-examples-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-excelant-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-ooxml-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-ooxml-schemas-4.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Lib/poi-scratchpad-4.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
