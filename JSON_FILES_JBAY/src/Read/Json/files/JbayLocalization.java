@@ -1,26 +1,29 @@
 package Read.Json.files;
 
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import com.google.gson.JsonObject;
+import org.json.simple.parser.JSONParser;
 
 public class JbayLocalization {
 
 	public static String identifier = null;
 	public static String filePath = "D:/LAUNCH_StringFile_Latest_JBay_07.xls";
 	public static Object object;
-
+	public static int aa;
+	private static File f;
+	private static Set<String> tempUniCodes = new HashSet<String>();
 	public static ArrayList<LanguagePojo> arrayListEnglish = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListPTBR = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListCN = new ArrayList<LanguagePojo>();
@@ -42,11 +45,12 @@ public class JbayLocalization {
 	public static FileOutputStream fileOut;
 	public static JSONParser jsonParser;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		init();
-		Detect obj1 = new Detect();
-		obj1.findTruncation();
+		storeFontsInSet();
+		System.out.println("Total Id: -------->"+aa);
+		System.out.println("Size of temp code is: "+tempUniCodes.size());
 	}
 
 	private static void init() {
@@ -184,6 +188,7 @@ public class JbayLocalization {
 
 					HSSFRow row = sheet.createRow((short) i);
 					setCellValues(row, i);
+					aa++;
 				}
 			}
 		} catch (Exception e) {
@@ -212,29 +217,44 @@ public class JbayLocalization {
 		headerCount++;
 	}
 
-	private static void setCellValues(HSSFRow row, int i) {
+	
+	private static void setCellValues(HSSFRow row, int i) throws IOException {
 
-		valueRowByrow(row, i, arrayListEnglish);
-		valueRowByrow(row, i, arrayListPTBR);
-		valueRowByrow(row, i, arrayListCN);
-		valueRowByrow(row, i, arrayListDE);
-		valueRowByrow(row, i, arrayListES);
-		valueRowByrow(row, i, arrayListFR);
-		valueRowByrow(row, i, arrayListIT);
-		valueRowByrow(row, i, arrayListJP);
-		valueRowByrow(row, i, arrayListKR);
-		valueRowByrow(row, i, arrayListRU);
-		valueRowByrow(row, i, arrayListSE);
-		valueRowByrow(row, i, arrayListTW);
-		valueRowByrow(row, i, arrayListTW);
+		f= new File("./Default.txt");
+		valueRowByrow(row, i, arrayListEnglish,f);
+		f = new File("./Portuguese.txt");
+		valueRowByrow(row, i, arrayListPTBR,f);
+		f = new File("./Chinese.txt");
+		valueRowByrow(row, i, arrayListCN,f);
+		f = new File("./Portuguese.txt");
+		valueRowByrow(row, i, arrayListDE,f);
+		f = new File("./German.txt");
+		valueRowByrow(row, i, arrayListES,f);
+		f = new File("./Spanish.txt");
+		valueRowByrow(row, i, arrayListFR,f);
+		f = new File("./French.txt");
+		valueRowByrow(row, i, arrayListIT,f);
+		f = new File("./Italian.txt");
+		valueRowByrow(row, i, arrayListJP,f);
+		f = new File("./Japanese.txt");
+		valueRowByrow(row, i, arrayListKR,f);
+		f = new File("./Korean.txt");
+		valueRowByrow(row, i, arrayListRU,f);
+		f = new File("./Russian.txt");
+		valueRowByrow(row, i, arrayListSE,f);
+		f = new File("./Swedish.txt");
+		valueRowByrow(row, i, arrayListTW,f);
+		f = new File("./Tchinese.txt");
+		valueRowByrow(row, i, arrayListTW,f);
 
 		columnCount = 0;
 	}
 
-	private static void valueRowByrow(HSSFRow row, int i, ArrayList<LanguagePojo> arrayList) {
+	private static void valueRowByrow(HSSFRow row, int i, ArrayList<LanguagePojo> arrayList,File f) throws IOException {
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getIdentifier());
 		columnCount++;
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getLanguage());
+		generateFontRanges(arrayList.get(i).getLanguage(), f);
 		columnCount++;
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getFontName());
 		columnCount++;
@@ -252,4 +272,34 @@ public class JbayLocalization {
 		columnCount++;
 	}
 
+	private static void storeFontsInSet() throws IOException
+	{
+		String token1 = "";
+	    Scanner inFile1 = new Scanner(new File("Default.txt")).useDelimiter(",");
+	    while (inFile1.hasNext()) {
+	      token1 = inFile1.next();
+	      tempUniCodes.add(token1);
+	      System.out.println(token1.toString());
+	    }
+	    inFile1.close();
+	    FileWriter fw = new FileWriter("Default.txt");
+	    PrintWriter pw = new PrintWriter(fw);
+	    pw.write("");
+	    for( String s : tempUniCodes)
+	    	fw.write(s+",");
+	    fw.close();
+	    pw.close();
+	}
+	private static void generateFontRanges(String language,File f) throws IOException
+	{
+
+		FileWriter wt = null;
+		wt = new FileWriter(f,true);
+		for (int j = 0; j < language.length(); j++) {
+			wt.write("0x" + Integer.toHexString(language.charAt(j)) + ",");
+		}
+		wt.flush();
+		wt.close();
+	}
+	
 }
