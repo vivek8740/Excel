@@ -1,63 +1,188 @@
 package Read.Json.files;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellType;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Detect {
-
-	public static String filePath = "D:/LAUNCH_StringFile_Latest_JBay_07.xls";
-	public static HSSFWorkbook workbook;
-	public static HSSFSheet sheet,temp_sheet;
-	public static FileOutputStream fileOut;
-	public static String  temp_sheet_name = null;
-	public static void findTruncation() 
+	private static Set<String> allLangUniCodes = new HashSet<String>();
+	private static FileReader readFile;
+	private static FileWriter writeFile;
+	private static String unicode_value;
+	private static Scanner scanner;
+	static int index1,languageFileCount = 0;
+	static int index2;
+	private int min_Range,max_Range;
+	private static ArrayList<String> lines;
+	public static void main(String[] args)
 	{
-		try 
+		try
 		{
-			
-			HSSFRow row,row_head;
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(new File(filePath)));
-			sheet = workbook.getSheetAt(0);
-			for (int nrow = 0; nrow < 5 ; nrow++)
-			{
-				if(nrow > 0)
-				{
-					temp_sheet_name = sheet.getRow(nrow).getCell(0).getStringCellValue();
-					temp_sheet = workbook.createSheet(temp_sheet_name);
-					row_head = temp_sheet.createRow(0);
-					row = temp_sheet.createRow(1);
-					for(int ncell = 0 ; ncell < sheet.getRow(0).getPhysicalNumberOfCells() ; ncell++)
-					{
-						row_head.createCell(ncell).setCellValue(sheet.getRow(0).getCell(ncell).toString());
-						if(sheet.getRow(nrow).getCell(ncell).getCellType() == CellType.STRING)
-							row.createCell(ncell).setCellValue(sheet.getRow(1).getCell(ncell).toString());
-						else
-						{
-							row.createCell(ncell, CellType.NUMERIC).setCellValue(sheet.getRow(nrow).getCell(ncell).getNumericCellValue());
-							row.setHeightInPoints((float)(sheet.getRow(1).getCell(8).getNumericCellValue() * .75));
-							
+			File folder = new File("./");
+			File[] listOfFiles = folder.listFiles();
+			for (File file : listOfFiles) {
+				if (file.isFile() && file.getName().endsWith(".txt")) {	
+					readFile = new FileReader(file);
+						scanner = new Scanner(readFile).useDelimiter(",");
+						while (scanner.hasNext()) {
+							unicode_value = scanner.next();
+							allLangUniCodes.add(unicode_value);
 						}
-
-					}
+						//System.out.println("File: "+languageFileCount+ "unicodes added.");
+						languageFileCount++;
 				}
-
 			}
-			fileOut = new FileOutputStream(filePath);
-			workbook.write(fileOut);
-			fileOut.close();
-			workbook.close();
-			System.out.println("Truncation Detected....");
-		} 
-		catch (Exception e) 
+			final_font_sheet();
+		}
+		catch (Exception e)
 		{
 			System.out.println(e);
 		}
-
 	}
-
+	private static void final_font_sheet()
+	{
+		try
+		{
+			languageFileCount = 0;
+			int index = 0;
+			boolean flag = false;
+			File folder = new File("./");
+			File[] listOfFiles = folder.listFiles();
+			for (File file : listOfFiles) {
+				if (file.isFile() && file.getName().endsWith(".txt")) {
+					lines = new ArrayList<String>();	
+					readFile = new FileReader(file);
+						scanner = new Scanner(readFile).useDelimiter(",");
+						String unicodeValue1,unicodeValue2;
+						while (scanner.hasNext()) 
+						{
+							unicodeValue1 = scanner.next();
+							Iterator<String> itr = allLangUniCodes.iterator();
+							System.out.println(allLangUniCodes.size());
+							while (itr.hasNext()) 
+							{
+								unicodeValue2 = itr.next();
+								if (unicodeValue1.endsWith(unicodeValue2))
+								{
+									flag = removeStringValue(unicodeValue1,file);;
+									if(flag == true)
+									{
+										itr.remove();
+										flag = false;
+									}
+								}
+							}
+						} 
+						writeFile = new FileWriter(file);
+						PrintWriter pw = new PrintWriter(writeFile);
+						pw.write("");
+						for (String s : lines)
+							writeFile.write(s + ",");
+						writeFile.close();
+						pw.close();
+						scanner.close();
+						//System.out.println("Same unicodes from multiple files are deleted.");
+				}
+			}
+			//System.out.println(index);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+			
+	}
+	private static boolean removeStringValue(String value,File fname)
+	{
+		
+		String tempUnicode;
+		Detect detect = new Detect();
+		detect.calculate_min_max_range(detect,fname);
+		tempUnicode = value.substring(2, value.length());
+		if(Integer.parseInt(tempUnicode,16)> detect.min_Range && Integer.parseInt(tempUnicode,16)< detect.max_Range)
+		{
+			lines.add(value);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	private Detect calculate_min_max_range(Detect detect,File fname)
+	{
+		String temp = fname.getName();
+		switch (temp) {
+		case "Default.txt":
+			{
+				detect.min_Range = 32;
+				detect.max_Range = 8447;
+				break;
+			}
+		case "Portuguese.txt":
+		{
+			detect.min_Range = 32;
+			detect.max_Range = 8447;
+			break;
+		}
+		case "Chinese.txt":
+		{
+			detect.min_Range = 12288;
+			detect.max_Range = 65519;
+			break;
+		}
+		case "Tchinese.txt":
+		{
+			detect.min_Range = 12288;
+			detect.max_Range = 65519;
+			break;
+		}
+		case "Korean.txt":
+		{
+			detect.min_Range = 44032;
+			detect.max_Range = 55215;
+			break;
+		}
+		case "Russian.txt":
+		{
+			detect.min_Range = 1024;
+			detect.max_Range = 1279;
+			break;
+		}
+		case "Japanese.txt":
+		{
+			detect.min_Range = 12288;
+			detect.max_Range = 65519;
+			break;
+		}
+		case "Spanish.txt":
+		{
+			detect.min_Range = 32;
+			detect.max_Range = 8447;
+			break;
+		}
+		case "German.txt":
+		{
+			detect.min_Range = 32;
+			detect.max_Range = 8447;
+			break;
+		}
+		case "Swedish.txt":
+		{
+			detect.min_Range = 32;
+			detect.max_Range = 8447;
+			break;
+		}
+		default:
+			break;
+		}
+		
+		return detect;
+	}
+		
+	
 }

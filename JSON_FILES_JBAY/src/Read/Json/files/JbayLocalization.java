@@ -1,6 +1,7 @@
 package Read.Json.files;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class JbayLocalization {
 	public static String filePath = "D:/LAUNCH_StringFile_Latest_JBay_07.xls";
 	public static Object object;
 	public static int aa;
-	private static File f;
+	private static File fontFile;
 	private static Set<String> tempUniCodes = new HashSet<String>();
 	public static ArrayList<LanguagePojo> arrayListEnglish = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListPTBR = new ArrayList<LanguagePojo>();
@@ -44,13 +45,15 @@ public class JbayLocalization {
 	public static HSSFSheet sheet;
 	public static FileOutputStream fileOut;
 	public static JSONParser jsonParser;
+	private static FileWriter fileWriter;
+	private static Scanner scanner;
 
 	public static void main(String[] args) throws IOException {
 
 		init();
 		storeFontsInSet();
-		System.out.println("Total Id: -------->"+aa);
-		System.out.println("Size of temp code is: "+tempUniCodes.size());
+		System.out.println("Total Id: -------->" + aa);
+		System.out.println("Size of temp code is: " + tempUniCodes.size());
 	}
 
 	private static void init() {
@@ -217,44 +220,45 @@ public class JbayLocalization {
 		headerCount++;
 	}
 
-	
 	private static void setCellValues(HSSFRow row, int i) throws IOException {
 
-		f= new File("./Default.txt");
-		valueRowByrow(row, i, arrayListEnglish,f);
-		f = new File("./Portuguese.txt");
-		valueRowByrow(row, i, arrayListPTBR,f);
-		f = new File("./Chinese.txt");
-		valueRowByrow(row, i, arrayListCN,f);
-		f = new File("./Portuguese.txt");
-		valueRowByrow(row, i, arrayListDE,f);
-		f = new File("./German.txt");
-		valueRowByrow(row, i, arrayListES,f);
-		f = new File("./Spanish.txt");
-		valueRowByrow(row, i, arrayListFR,f);
-		f = new File("./French.txt");
-		valueRowByrow(row, i, arrayListIT,f);
-		f = new File("./Italian.txt");
-		valueRowByrow(row, i, arrayListJP,f);
-		f = new File("./Japanese.txt");
-		valueRowByrow(row, i, arrayListKR,f);
-		f = new File("./Korean.txt");
-		valueRowByrow(row, i, arrayListRU,f);
-		f = new File("./Russian.txt");
-		valueRowByrow(row, i, arrayListSE,f);
-		f = new File("./Swedish.txt");
-		valueRowByrow(row, i, arrayListTW,f);
-		f = new File("./Tchinese.txt");
-		valueRowByrow(row, i, arrayListTW,f);
+		fontFile = new File("./Default.txt");
+		valueRowByrow(row, i, arrayListEnglish, fontFile);
+		fontFile = new File("./Portuguese.txt");
+		valueRowByrow(row, i, arrayListPTBR, fontFile);
+		fontFile = new File("./Chinese.txt");
+		valueRowByrow(row, i, arrayListCN, fontFile);
+		fontFile = new File("./Portuguese.txt");
+		valueRowByrow(row, i, arrayListDE, fontFile);
+		fontFile = new File("./German.txt");
+		valueRowByrow(row, i, arrayListES, fontFile);
+		fontFile = new File("./Spanish.txt");
+		valueRowByrow(row, i, arrayListFR, fontFile);
+		fontFile = new File("./French.txt");
+		valueRowByrow(row, i, arrayListIT, fontFile);
+		fontFile = new File("./Italian.txt");
+		valueRowByrow(row, i, arrayListJP, fontFile);
+		fontFile = new File("./Japanese.txt");
+		valueRowByrow(row, i, arrayListKR, fontFile);
+		fontFile = new File("./Korean.txt");
+		valueRowByrow(row, i, arrayListRU, fontFile);
+		fontFile = new File("./Russian.txt");
+		valueRowByrow(row, i, arrayListSE, fontFile);
+		fontFile = new File("./Swedish.txt");
+		valueRowByrow(row, i, arrayListTW, fontFile);
+		fontFile = new File("./Tchinese.txt");
+		valueRowByrow(row, i, arrayListTW, fontFile);
 
 		columnCount = 0;
+
 	}
 
-	private static void valueRowByrow(HSSFRow row, int i, ArrayList<LanguagePojo> arrayList,File f) throws IOException {
+	private static void valueRowByrow(HSSFRow row, int i, ArrayList<LanguagePojo> arrayList, File fontFile)
+			throws IOException {
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getIdentifier());
 		columnCount++;
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getLanguage());
-		generateFontRanges(arrayList.get(i).getLanguage(), f);
+		generateFontHexString(arrayList.get(i).getLanguage(), fontFile);
 		columnCount++;
 		row.createCell(columnCount).setCellValue(arrayList.get(i).getFontName());
 		columnCount++;
@@ -272,34 +276,97 @@ public class JbayLocalization {
 		columnCount++;
 	}
 
-	private static void storeFontsInSet() throws IOException
-	{
-		String token1 = "";
-	    Scanner inFile1 = new Scanner(new File("Default.txt")).useDelimiter(",");
-	    while (inFile1.hasNext()) {
-	      token1 = inFile1.next();
-	      tempUniCodes.add(token1);
-	      System.out.println(token1.toString());
-	    }
-	    inFile1.close();
-	    FileWriter fw = new FileWriter("Default.txt");
-	    PrintWriter pw = new PrintWriter(fw);
-	    pw.write("");
-	    for( String s : tempUniCodes)
-	    	fw.write(s+",");
-	    fw.close();
-	    pw.close();
-	}
-	private static void generateFontRanges(String language,File f) throws IOException
-	{
+	private static void storeFontsInSet() {
+		File filename;
+		int index;
+		String unicode_value;
+		try {
+			for (index = 0; index < 12; index++) {
+				filename = map_index_with_fontFile(index);
+				scanner = new Scanner(filename).useDelimiter(",");
+				while (scanner.hasNext()) {
+					unicode_value = scanner.next();
+					System.out.println(unicode_value.toString());
+					tempUniCodes.add(unicode_value);
+				}
+				FileWriter fw = new FileWriter(filename);
+				PrintWriter pw = new PrintWriter(fw);
+				pw.write("");
+				for (String s : tempUniCodes)
+					fw.write(s + ",");
+				fw.close();
+				pw.close();
+				scanner.close();
+			}
 
-		FileWriter wt = null;
-		wt = new FileWriter(f,true);
-		for (int j = 0; j < language.length(); j++) {
-			wt.write("0x" + Integer.toHexString(language.charAt(j)) + ",");
+		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
-		wt.flush();
-		wt.close();
 	}
-	
+
+	private static void generateFontHexString(String language, File fontFile) {
+
+		try {
+			fileWriter = new FileWriter(fontFile, true);
+			for (int j = 0; j < language.length(); j++) {
+				fileWriter.write("0x" + Integer.toHexString(language.charAt(j)) + ",");
+			}
+
+			fileWriter.flush();
+			fileWriter.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// This method will return different font file depending on the index passed.
+	private static File map_index_with_fontFile(int index) {
+		File return_file;
+		switch (index) {
+		case 0:
+			return_file = new File("Default.txt");
+			break;
+		case 1:
+			return_file = new File("Portuguese.txt");
+			break;
+		case 2:
+			return_file = new File("French.txt");
+			break;
+		case 3:
+			return_file = new File("Italian.txt");
+			break;
+		case 4:
+			return_file = new File("German.txt");
+			break;
+		case 5:
+			return_file = new File("Russian.txt");
+			break;
+		case 6:
+			return_file = new File("Spanish.txt");
+			break;
+		case 7:
+			return_file = new File("Swedish.txt");
+			break;
+		case 8:
+			return_file = new File("chinese.txt");
+			break;
+		case 9:
+			return_file = new File("Tchinese.txt");
+			break;
+		case 10:
+			return_file = new File("Korean.txt");
+			break;
+		case 11:
+			return_file = new File("Japanese.txt");
+			break;
+		default: {
+			System.out.println("No File Found");
+			return_file = null;
+		}
+			break;
+		}
+		return return_file;
+	}
+
 }
