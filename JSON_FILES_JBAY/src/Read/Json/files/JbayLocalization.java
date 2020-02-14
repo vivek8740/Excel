@@ -1,7 +1,6 @@
 package Read.Json.files;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,11 +19,13 @@ import org.json.simple.parser.JSONParser;
 public class JbayLocalization {
 
 	public static String identifier = null;
-	public static String filePath = "D:/LAUNCH_StringFile_Latest_JBay_07.xls";
+	public static String camera = "JBAY_Source_Of_Truth";
+	public static String filePath = "D:/Localized.xls";
 	public static Object object;
 	public static int aa;
+	private int min_Range,max_Range;
 	private static File fontFile;
-	private static Set<String> tempUniCodes = new HashSet<String>();
+	private static Set<String> tempUniCodes;
 	public static ArrayList<LanguagePojo> arrayListEnglish = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListPTBR = new ArrayList<LanguagePojo>();
 	public static ArrayList<LanguagePojo> arrayListCN = new ArrayList<LanguagePojo>();
@@ -52,8 +53,6 @@ public class JbayLocalization {
 
 		init();
 		storeFontsInSet();
-		System.out.println("Total Id: -------->" + aa);
-		System.out.println("Size of temp code is: " + tempUniCodes.size());
 	}
 
 	private static void init() {
@@ -61,7 +60,7 @@ public class JbayLocalization {
 		try {
 
 			workbook = new HSSFWorkbook();
-			sheet = workbook.createSheet("StringSheet");
+			sheet = workbook.createSheet("SourceOfTruth");
 			jsonParser = new JSONParser();
 
 			arrayListEnglish = Utils.getlanguages(workbook, sheet, jsonParser, "COCO_RD_Copy_10232019.json");
@@ -181,12 +180,6 @@ public class JbayLocalization {
 					rowhead.createCell(headerCount).setCellValue("TChinese");
 					details(rowhead);
 
-					// TChinese -> TW
-					rowhead.createCell(headerCount).setCellValue("Identifier");
-					headerCount++;
-					rowhead.createCell(headerCount).setCellValue("TChinese");
-					details(rowhead);
-
 				} else {
 
 					HSSFRow row = sheet.createRow((short) i);
@@ -228,27 +221,24 @@ public class JbayLocalization {
 		valueRowByrow(row, i, arrayListPTBR, fontFile);
 		fontFile = new File("./Chinese.txt");
 		valueRowByrow(row, i, arrayListCN, fontFile);
-		fontFile = new File("./Portuguese.txt");
-		valueRowByrow(row, i, arrayListDE, fontFile);
 		fontFile = new File("./German.txt");
-		valueRowByrow(row, i, arrayListES, fontFile);
+		valueRowByrow(row, i, arrayListDE, fontFile);
 		fontFile = new File("./Spanish.txt");
-		valueRowByrow(row, i, arrayListFR, fontFile);
+		valueRowByrow(row, i, arrayListES, fontFile);
 		fontFile = new File("./French.txt");
-		valueRowByrow(row, i, arrayListIT, fontFile);
+		valueRowByrow(row, i, arrayListFR, fontFile);
 		fontFile = new File("./Italian.txt");
-		valueRowByrow(row, i, arrayListJP, fontFile);
+		valueRowByrow(row, i, arrayListIT, fontFile);
 		fontFile = new File("./Japanese.txt");
-		valueRowByrow(row, i, arrayListKR, fontFile);
+		valueRowByrow(row, i, arrayListJP, fontFile);
 		fontFile = new File("./Korean.txt");
-		valueRowByrow(row, i, arrayListRU, fontFile);
+		valueRowByrow(row, i, arrayListKR, fontFile);
 		fontFile = new File("./Russian.txt");
-		valueRowByrow(row, i, arrayListSE, fontFile);
+		valueRowByrow(row, i, arrayListRU, fontFile);
 		fontFile = new File("./Swedish.txt");
-		valueRowByrow(row, i, arrayListTW, fontFile);
+		valueRowByrow(row, i, arrayListSE, fontFile);
 		fontFile = new File("./Tchinese.txt");
 		valueRowByrow(row, i, arrayListTW, fontFile);
-
 		columnCount = 0;
 
 	}
@@ -276,24 +266,35 @@ public class JbayLocalization {
 		columnCount++;
 	}
 
+	@SuppressWarnings("resource")
 	private static void storeFontsInSet() {
 		File filename;
 		int index;
-		String unicode_value;
+		String unicode_value,temp_unicode;
+		JbayLocalization fontObject = new JbayLocalization();
 		try {
 			for (index = 0; index < 12; index++) {
+				tempUniCodes = new HashSet<String>();
+				fontObject = new JbayLocalization();
 				filename = map_index_with_fontFile(index);
+				fontObject.calculate_min_max_range(fontObject, filename);
+				tempUniCodes.add("0x"+ Integer.toHexString(fontObject.min_Range)+"-0x"+Integer.toHexString(fontObject.max_Range));
+				
 				scanner = new Scanner(filename).useDelimiter(",");
 				while (scanner.hasNext()) {
 					unicode_value = scanner.next();
-					System.out.println(unicode_value.toString());
-					tempUniCodes.add(unicode_value);
+					temp_unicode = unicode_value.substring(2, unicode_value.length());
+					if(Integer.parseInt(temp_unicode,16)> fontObject.min_Range && Integer.parseInt(temp_unicode,16)< fontObject.max_Range)
+					{
+						tempUniCodes.add(unicode_value);
+					}
 				}
 				FileWriter fw = new FileWriter(filename);
 				PrintWriter pw = new PrintWriter(fw);
 				pw.write("");
 				for (String s : tempUniCodes)
 					fw.write(s + ",");
+				tempUniCodes = null;
 				fw.close();
 				pw.close();
 				scanner.close();
@@ -304,6 +305,7 @@ public class JbayLocalization {
 		}
 	}
 
+	//Method to generate Font Range.
 	private static void generateFontHexString(String language, File fontFile) {
 
 		try {
@@ -331,34 +333,34 @@ public class JbayLocalization {
 			return_file = new File("Portuguese.txt");
 			break;
 		case 2:
-			return_file = new File("French.txt");
+			return_file = new File("Chinese.txt");
 			break;
 		case 3:
-			return_file = new File("Italian.txt");
-			break;
-		case 4:
 			return_file = new File("German.txt");
 			break;
-		case 5:
-			return_file = new File("Russian.txt");
-			break;
-		case 6:
+		case 4:
 			return_file = new File("Spanish.txt");
 			break;
+		case 5:
+			return_file = new File("French.txt");
+			break;
+		case 6:
+			return_file = new File("Italian.txt");
+			break;
 		case 7:
-			return_file = new File("Swedish.txt");
+			return_file = new File("Japanese.txt");
 			break;
 		case 8:
-			return_file = new File("chinese.txt");
-			break;
-		case 9:
-			return_file = new File("Tchinese.txt");
-			break;
-		case 10:
 			return_file = new File("Korean.txt");
 			break;
+		case 9:
+			return_file = new File("Russian.txt");
+			break;
+		case 10:
+			return_file = new File("Swedish.txt");
+			break;
 		case 11:
-			return_file = new File("Japanese.txt");
+			return_file = new File("Tchinese.txt");
 			break;
 		default: {
 			System.out.println("No File Found");
@@ -368,5 +370,91 @@ public class JbayLocalization {
 		}
 		return return_file;
 	}
+	
+	//Method to return Minimum and maximum Range of Fonts for each locale.
+	private JbayLocalization calculate_min_max_range(JbayLocalization object,File fname)
+	{
+		String temp = fname.getName();
+		switch (temp) {
+		case "Default.txt":
+			{
+				object.min_Range = 32;
+				object.max_Range = 8447;
+				break;
+			}
+		case "Portuguese.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		case "Chinese.txt":
+		{
+			object.min_Range = 12288;
+			object.max_Range = 65519;
+			break;
+		}
+		case "Tchinese.txt":
+		{
+			object.min_Range = 12288;
+			object.max_Range = 65519;
+			break;
+		}
+		case "Korean.txt":
+		{
+			object.min_Range = 44032;
+			object.max_Range = 55215;
+			break;
+		}
+		case "Russian.txt":
+		{
+			object.min_Range = 1024;
+			object.max_Range = 1279;
+			break;
+		}
+		case "Japanese.txt":
+		{
+			object.min_Range = 12288;
+			object.max_Range = 65519;
+			break;
+		}
+		case "Spanish.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		case "German.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		case "Swedish.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		case "French.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		case "Italian.txt":
+		{
+			object.min_Range = 32;
+			object.max_Range = 8447;
+			break;
+		}
+		default:
+			break;
+		}
+		
+		return object;
+	}
+
 
 }
+
